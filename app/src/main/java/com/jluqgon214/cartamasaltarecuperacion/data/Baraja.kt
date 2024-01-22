@@ -1,6 +1,7 @@
 package com.jluqgon214.cartamasaltarecuperacion.data
 
 import android.content.Context
+import android.util.Log
 import com.jluqgon214.cartamasaltarecuperacion.R
 
 /**
@@ -23,11 +24,11 @@ class Baraja {
                         numero,
                         palo,
                         indice + 1,
-                        asignarValor(indice + 1),
                         0
                     )
                     carta.idDrawable = getIdDrawable(context, "${carta.palo.name[0].toLowerCase()}${indice+1}")
                     listaCartas.add(carta)
+                    Log.e("Id Carta", "${carta.nombre} ${carta.palo} ${carta.idDrawable}")
                 }
             }
         }
@@ -38,19 +39,6 @@ class Baraja {
                 "drawable",
                 context.packageName
             )
-        }
-
-        private fun asignarValor(numero: Int): Int {
-            return when {
-                numero == 1 -> 11 // As
-                numero > 10 -> 10 // Figuras (Jota, Reina, Rey)
-                else -> numero
-            }
-        }
-
-        private fun asignarImagen(numero: Int, palo: Palos): Int {
-            val nombreImagen = "${palo.name[0].lowercaseChar()}${numero}".toInt()
-            return nombreImagen
         }
 
         fun barajar() {
@@ -70,10 +58,6 @@ class Baraja {
         fun startGame(context: Context) {
             crearBaraja(context)
             barajar()
-        }
-
-        fun getReverseCard(): Carta {
-            return (Carta(Naipes.As, Palos.Picas, 0, 0, R.drawable.reverse))
         }
     }
 }

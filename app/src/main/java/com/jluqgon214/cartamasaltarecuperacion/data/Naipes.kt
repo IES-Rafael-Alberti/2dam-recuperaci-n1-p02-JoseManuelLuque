@@ -8,10 +8,7 @@ enum class Naipes {
     Cinco,
     Seis,
     Siete,
-    Ocho,
-    Nueve,
-    Diez,
-    Jota,
-    Reina,
+    Sota,
+    Caballo,
     Rey
 }

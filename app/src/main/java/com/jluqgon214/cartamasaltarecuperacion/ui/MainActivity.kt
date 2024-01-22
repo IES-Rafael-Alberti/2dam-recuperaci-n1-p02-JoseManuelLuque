@@ -1,7 +1,7 @@
 package com.jluqgon214.cartamasaltarecuperacion.ui
 
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -9,17 +9,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,13 +66,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
-
-    var gameStarted by rememberSaveable {
-        mutableStateOf(false)
-    }
-
     Column(
         Modifier
             .fillMaxSize()
@@ -77,11 +76,106 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Image(
-            painter = painterResource(id = viewModel.cartaActual.value!!.idDrawable),
-            contentDescription = "Carta",
-            Modifier.size(250.dp)
+        Text(
+            text = "Numero de cartas en la Baraja: ${Baraja.listaCartas.size}",
+            color = Color.White
         )
+        Spacer(modifier = Modifier.size(20.dp))
+        Text(text = "Jugador 1:", color = Color.White)
+
+        Card(
+            onClick = {
+                if (viewModel.gameStarted.value == false) {
+                    Baraja.startGame(viewModel.context.value!!)
+                    viewModel.gameStarted.value = true
+                }
+                if (Baraja.listaCartas.isEmpty()) {
+                    Toast.makeText(
+                        viewModel.context.value,
+                        "No quedan cartas en la baraja",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    viewModel.cartaJ1.value = Baraja.dameCarta()
+                    viewModel.cartaJ2.value = Baraja.dameCarta()
+                    if (viewModel.CalcularPuntos() == 1) {
+                        Toast.makeText(
+                            viewModel.context.value,
+                            "Ganador: Jugador 1",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    if (viewModel.CalcularPuntos() == 2) {
+                        Toast.makeText(
+                            viewModel.context.value,
+                            "Ganador: Jugador 2",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    if (viewModel.CalcularPuntos() == 0) {
+                        Toast.makeText(viewModel.context.value, "Empate", Toast.LENGTH_LONG).show()
+                    }
+                }
+                navController.navigate("pantallaCambio")
+            },
+            modifier = Modifier
+                .width(150.dp)
+                .height(228.dp)
+        ) {
+            Image(
+                painter = painterResource(id = viewModel.cartaJ1.value!!.idDrawable),
+                contentDescription = "Carta Jugador 1",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        Text(text = "Jugador 2:", color = Color.White)
+        Card(
+            onClick = {
+
+                if (viewModel.gameStarted.value == false) {
+                    Baraja.startGame(viewModel.context.value!!)
+                    viewModel.gameStarted.value = true
+                }
+                if (Baraja.listaCartas.isEmpty()) {
+                    Toast.makeText(
+                        viewModel.context.value,
+                        "No quedan cartas en la baraja",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    viewModel.cartaJ1.value = Baraja.dameCarta()
+                    viewModel.cartaJ2.value = Baraja.dameCarta()
+                    if (viewModel.CalcularPuntos() == 1) {
+                        Toast.makeText(
+                            viewModel.context.value,
+                            "Ganador: Jugador 1",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    if (viewModel.CalcularPuntos() == 2) {
+                        Toast.makeText(
+                            viewModel.context.value,
+                            "Ganador: Jugador 2",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    if (viewModel.CalcularPuntos() == 0) {
+                        Toast.makeText(viewModel.context.value, "Empate", Toast.LENGTH_LONG).show()
+                    }
+                }
+                navController.navigate("pantallaCambio")
+            },
+            modifier = Modifier
+                .width(150.dp)
+                .height(228.dp)
+        ) {
+            Image(
+                painter = painterResource(id = viewModel.cartaJ2.value!!.idDrawable),
+                contentDescription = "Carta Jugador 2",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 
     Row(
@@ -92,26 +186,11 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
         horizontalArrangement = Arrangement.Center
     ) {
         Button(onClick = {
-            if (!gameStarted) {
-                Baraja.startGame(viewModel.context.value!!)
-                gameStarted = true
-            }
-            if (Baraja.listaCartas.isEmpty()) {
-                //showToast("No quedan cartas en la baraja")
-                Log.d("Exception", "Baraja de cartas Vacia")
-            } else {
-                viewModel.cartaActual.value = Baraja.dameCarta()
-                Log.d("Yo mismo", "${viewModel.cartaActual.value!!} ${Baraja.listaCartas.size}")
-            }
-            navController.navigate("pantallaCambio")
-
-        }, Modifier.padding(10.dp)) {
-            Text(text = "Dame Carta")
-        }
-        Button(onClick = {
             Baraja.borrarBaraja()
             Baraja.crearBaraja(viewModel.context.value!!)
             Baraja.barajar()
+            viewModel.getReverseCard()
+            navController.navigate("pantallaCambio")
         }, Modifier.padding(10.dp)) {
             Text(text = "Reiniciar")
         }
@@ -121,4 +200,43 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
 @Composable
 fun PantallaCambio(navController: NavController) {
     navController.navigate("CartaMasAlta")
+}
+
+
+@Composable
+fun AlertDialogGanador(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    dialogTitle: String,
+    dialogText: String
+) {
+    AlertDialog(
+        title = {
+            Text(text = dialogTitle)
+        },
+        text = {
+            Text(text = dialogText)
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmation()
+                }
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                }
+            ) {
+                Text("Dismiss")
+            }
+        }
+    )
 }
