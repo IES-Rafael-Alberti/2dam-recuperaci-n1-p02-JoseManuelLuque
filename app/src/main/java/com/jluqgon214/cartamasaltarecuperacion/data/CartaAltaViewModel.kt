@@ -9,6 +9,8 @@ import com.jluqgon214.cartamasaltarecuperacion.R
 class CartaAltaViewModel(application: Application) : AndroidViewModel(application) {
     val context = MutableLiveData<Context>(getApplication<Application>().applicationContext)
     val gameStarted = MutableLiveData<Boolean>(false)
+    val showWinnerDialog = MutableLiveData<Boolean>(false)
+    val winner = MutableLiveData<Any>()
 
     var cartaJ1 = MutableLiveData<Carta>(
         Carta(
