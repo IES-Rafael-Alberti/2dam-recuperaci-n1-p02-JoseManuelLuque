@@ -2,6 +2,7 @@ package com.jluqgon214.cartamasaltarecuperacion.data
 
 import android.app.Application
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.jluqgon214.cartamasaltarecuperacion.R
@@ -53,6 +54,36 @@ class CartaAltaViewModel(application: Application) : AndroidViewModel(applicatio
         }
         else{
             return 0
+        }
+    }
+
+    fun ComprobarGanador() {
+        if (gameStarted.value == false) {
+            Baraja.startGame(context.value!!)
+            gameStarted.value = true
+        }
+        if (Baraja.listaCartas.isEmpty()) {
+            Toast.makeText(
+                context.value,
+                "No quedan cartas en la baraja",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            cartaJ1.value = Baraja.dameCarta()
+            cartaJ2.value = Baraja.dameCarta()
+
+            if (CalcularPuntos() == 1) {
+                showWinnerDialog.value = true
+                winner.value = 1
+            }
+            if (CalcularPuntos() == 2) {
+                showWinnerDialog.value = true
+                winner.value = 2
+            }
+            if (CalcularPuntos() == 0) {
+                showWinnerDialog.value = true
+                winner.value = 0
+            }
         }
     }
 }

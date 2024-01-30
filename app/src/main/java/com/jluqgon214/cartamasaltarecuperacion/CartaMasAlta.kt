@@ -1,8 +1,6 @@
 package com.jluqgon214.cartamasaltarecuperacion
 
-import android.app.AlertDialog
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,8 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jluqgon214.cartamasaltarecuperacion.data.Baraja
+import com.jluqgon214.cartamasaltarecuperacion.data.Carta
 import com.jluqgon214.cartamasaltarecuperacion.data.CartaAltaViewModel
-import kotlin.concurrent.thread
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,90 +58,12 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
         Spacer(modifier = Modifier.size(20.dp))
         Text(text = "Jugador 1:", color = Color.White)
 
-        Card(
-            onClick = {
-                if (viewModel.gameStarted.value == false) {
-                    Baraja.startGame(viewModel.context.value!!)
-                    viewModel.gameStarted.value = true
-                }
-                if (Baraja.listaCartas.isEmpty()) {
-                    Toast.makeText(
-                        viewModel.context.value,
-                        "No quedan cartas en la baraja",
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    viewModel.cartaJ1.value = Baraja.dameCarta()
-                    viewModel.cartaJ2.value = Baraja.dameCarta()
+        mostrarCarta(viewModel = viewModel, navController = navController, cartaJugador = viewModel.cartaJ1.value)
 
-                    if (viewModel.CalcularPuntos() == 1) {
-                        viewModel.showWinnerDialog.value = true
-                        viewModel.winner.value = 1
-                    }
-                    if (viewModel.CalcularPuntos() == 2) {
-                        viewModel.showWinnerDialog.value = true
-                        viewModel.winner.value = 2
-                    }
-                    if (viewModel.CalcularPuntos() == 0) {
-                        viewModel.showWinnerDialog.value = true
-                        viewModel.winner.value = 0
-                    }
-                }
-                navController.navigate("pantallaCambio")
-            },
-            modifier = Modifier
-                .width(150.dp)
-                .height(228.dp)
-        ) {
-            Image(
-                painter = painterResource(id = viewModel.cartaJ1.value!!.idDrawable),
-                contentDescription = "Carta Jugador 1",
-                modifier = Modifier.fillMaxSize()
-            )
-        }
         Spacer(modifier = Modifier.size(20.dp))
         Text(text = "Jugador 2:", color = Color.White)
-        Card(
-            onClick = {
-                if (viewModel.gameStarted.value == false) {
-                    Baraja.startGame(viewModel.context.value!!)
-                    viewModel.gameStarted.value = true
-                }
-                if (Baraja.listaCartas.isEmpty()) {
-                    Toast.makeText(
-                        viewModel.context.value,
-                        "No quedan cartas en la baraja",
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    viewModel.cartaJ1.value = Baraja.dameCarta()
-                    viewModel.cartaJ2.value = Baraja.dameCarta()
 
-                    if (viewModel.CalcularPuntos() == 1) {
-                        viewModel.showWinnerDialog.value = true
-                        viewModel.winner.value = 1
-                    }
-                    if (viewModel.CalcularPuntos() == 2) {
-                        viewModel.showWinnerDialog.value = true
-                        viewModel.winner.value = 2
-                    }
-                    if (viewModel.CalcularPuntos() == 0) {
-                        viewModel.showWinnerDialog.value = true
-                        viewModel.winner.value = "niguno, hay un empate"
-                    }
-                }
-                navController.navigate("pantallaCambio")
-            },
-            modifier = Modifier
-                .width(150.dp)
-                .height(228.dp)
-        ) {
-            Image(
-                painter = painterResource(id = viewModel.cartaJ2.value!!.idDrawable),
-                contentDescription = "Carta Jugador 2",
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+        mostrarCarta(viewModel = viewModel, navController = navController, cartaJugador = viewModel.cartaJ2.value)
     }
 
     Row(
@@ -193,4 +113,23 @@ fun AlertDialogGanador(
             }
         }
     )
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun mostrarCarta(viewModel: CartaAltaViewModel, navController: NavController, cartaJugador: Carta?) {
+    Card(
+        onClick = {
+            viewModel.ComprobarGanador()
+            navController.navigate("pantallaCambio")
+        },
+        modifier = Modifier
+            .width(150.dp)
+            .height(228.dp)
+    ) {
+        Image(
+            painter = painterResource(id = cartaJugador!!.idDrawable),
+            contentDescription = "Carta",
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 }
