@@ -12,7 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jluqgon214.cartamasaltarecuperacion.CartaMasAlta
-import com.jluqgon214.cartamasaltarecuperacion.PantallaCambio
 import com.jluqgon214.cartamasaltarecuperacion.data.CartaAltaViewModel
 import com.jluqgon214.cartamasaltarecuperacion.ui.theme.CartaMasAltaRecuperacionTheme
 
@@ -34,10 +33,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("CartaMasAlta") {
                             CartaMasAlta(viewModel, navController)
-                        }
-
-                        composable("pantallaCambio") {
-                            PantallaCambio(navController = navController)
                         }
                     }
                 }

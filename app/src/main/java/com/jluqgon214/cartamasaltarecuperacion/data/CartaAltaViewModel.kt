@@ -4,31 +4,38 @@ import android.app.Application
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jluqgon214.cartamasaltarecuperacion.R
 
 class CartaAltaViewModel(application: Application) : AndroidViewModel(application) {
     val context = MutableLiveData<Context>(getApplication<Application>().applicationContext)
     val gameStarted = MutableLiveData<Boolean>(false)
-    val showWinnerDialog = MutableLiveData<Boolean>(false)
     val winner = MutableLiveData<Any>()
 
-    var cartaJ1 = MutableLiveData<Carta>(
-        Carta(
-        Naipes.As,
-        Palos.Oro,
-        1,
-        R.drawable.reverse
-    )
-    )
-    var cartaJ2 = MutableLiveData<Carta>(
-        Carta(
-            Naipes.As,
-            Palos.Oro,
-            1,
-            R.drawable.reverse
-        )
-    )
+    val _showWinnerDialog = MutableLiveData<Boolean>()
+    val showWinnerDialog : LiveData<Boolean> = _showWinnerDialog
+
+    private val _imageDesc = MutableLiveData<String>()
+    val imageDesc : LiveData<String> = _imageDesc
+
+    private val _imageIdJugador1 = MutableLiveData<Int>()
+    val imageIdJugador1 : LiveData<Int> = _imageIdJugador1
+
+    private val _imageIdJugador2 = MutableLiveData<Int>()
+    val imageIdJugador2 : LiveData<Int> = _imageIdJugador2
+
+
+    var cartaJ1 = MutableLiveData<Carta>()
+    var cartaJ2 = MutableLiveData<Carta>()
+
+    fun getCard() {
+        cartaJ1.value = Baraja.dameCarta()
+        _imageIdJugador1.value = cartaJ1.value?.idDrawable
+
+        cartaJ2.value = Baraja.dameCarta()
+        _imageIdJugador2.value = cartaJ2.value?.idDrawable
+    }
 
 
     init {
@@ -38,22 +45,24 @@ class CartaAltaViewModel(application: Application) : AndroidViewModel(applicatio
         Baraja.borrarBaraja()
         Baraja.crearBaraja(context = context)
         Baraja.barajar()
+        getReverseCard()
     }
     
     fun getReverseCard(){
         cartaJ1.value?.idDrawable = R.drawable.reverse
+        //_imageIdJugador1.value = cartaJ1.value?.idDrawable
         cartaJ2.value?.idDrawable = R.drawable.reverse
+        //_imageIdJugador2.value = cartaJ2.value?.idDrawable
     }
 
     fun CalcularPuntos(): Int{
         if(cartaJ1.value?.puntos!! > cartaJ2.value?.puntos!!) {
             return 1
         }
-        if(cartaJ1.value?.puntos!! < cartaJ2.value?.puntos!!) {
-            return 2
-        }
-        else{
-            return 0
+        return if(cartaJ1.value?.puntos!! < cartaJ2.value?.puntos!!) {
+            2
+        } else{
+            0
         }
     }
 
@@ -69,19 +78,16 @@ class CartaAltaViewModel(application: Application) : AndroidViewModel(applicatio
                 Toast.LENGTH_LONG
             ).show()
         } else {
-            cartaJ1.value = Baraja.dameCarta()
-            cartaJ2.value = Baraja.dameCarta()
-
             if (CalcularPuntos() == 1) {
-                showWinnerDialog.value = true
+                _showWinnerDialog.value = true
                 winner.value = 1
             }
             if (CalcularPuntos() == 2) {
-                showWinnerDialog.value = true
+                _showWinnerDialog.value = true
                 winner.value = 2
             }
             if (CalcularPuntos() == 0) {
-                showWinnerDialog.value = true
+                _showWinnerDialog.value = true
                 winner.value = 0
             }
         }

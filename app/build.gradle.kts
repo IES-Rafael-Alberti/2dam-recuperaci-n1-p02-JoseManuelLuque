@@ -67,4 +67,10 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.5")
+
+    //LiveData
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 }
