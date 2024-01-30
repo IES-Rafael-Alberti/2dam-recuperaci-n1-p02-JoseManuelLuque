@@ -1,6 +1,5 @@
 package com.jluqgon214.cartamasaltarecuperacion
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -82,8 +81,6 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
             Text(text = "Reiniciar")
         }
     }
-    Log.e("Test", "${viewModel.showWinnerDialog.value}")
-    Log.e("Test", "${viewModel.winner.value}")
 }
 
 @Composable
