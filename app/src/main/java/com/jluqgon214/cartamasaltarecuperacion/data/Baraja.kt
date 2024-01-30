@@ -2,7 +2,6 @@ package com.jluqgon214.cartamasaltarecuperacion.data
 
 import android.content.Context
 import android.util.Log
-import com.jluqgon214.cartamasaltarecuperacion.R
 
 /**
  * Métodos:
@@ -26,9 +25,9 @@ class Baraja {
                         indice + 1,
                         0
                     )
-                    carta.idDrawable = getIdDrawable(context, "${carta.palo.name[0].toLowerCase()}${indice+1}")
+                    carta.idDrawable =
+                        getIdDrawable(context, "${carta.palo.name[0].toLowerCase()}${indice + 1}")
                     listaCartas.add(carta)
-                    Log.e("Id Carta", "${carta.nombre} ${carta.palo} ${carta.idDrawable}")
                 }
             }
         }

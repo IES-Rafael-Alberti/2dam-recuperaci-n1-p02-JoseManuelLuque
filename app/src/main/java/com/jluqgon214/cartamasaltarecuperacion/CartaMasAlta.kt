@@ -1,5 +1,7 @@
 package com.jluqgon214.cartamasaltarecuperacion
 
+import android.app.AlertDialog
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -26,22 +28,24 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jluqgon214.cartamasaltarecuperacion.data.Baraja
 import com.jluqgon214.cartamasaltarecuperacion.data.CartaAltaViewModel
+import kotlin.concurrent.thread
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
+
     if (viewModel.showWinnerDialog.value!!) {
         AlertDialogGanador(
-            onDismissRequest = {
-                viewModel.showWinnerDialog.value = false
-                               },
+            onDismissRequest = { viewModel.showWinnerDialog.value = false },
             onConfirmation = {
                 viewModel.showWinnerDialog.value = false
+                navController.navigate("pantallaCambio")
                              },
             viewModel
         )
     }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -75,17 +79,14 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
                     if (viewModel.CalcularPuntos() == 1) {
                         viewModel.showWinnerDialog.value = true
                         viewModel.winner.value = 1
-                        //Toast.makeText(viewModel.context.value, "Ganador: Jugador 1", Toast.LENGTH_LONG).show()
                     }
                     if (viewModel.CalcularPuntos() == 2) {
                         viewModel.showWinnerDialog.value = true
                         viewModel.winner.value = 2
-                        //Toast.makeText( viewModel.context.value, "Ganador: Jugador 2", Toast.LENGTH_LONG ).show()
                     }
                     if (viewModel.CalcularPuntos() == 0) {
                         viewModel.showWinnerDialog.value = true
-                        viewModel.winner.value = "niguno, hay un empate"
-                        //Toast.makeText(viewModel.context.value, "Empate", Toast.LENGTH_LONG).show()
+                        viewModel.winner.value = 0
                     }
                 }
                 navController.navigate("pantallaCambio")
@@ -121,17 +122,14 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
                     if (viewModel.CalcularPuntos() == 1) {
                         viewModel.showWinnerDialog.value = true
                         viewModel.winner.value = 1
-                        //Toast.makeText(viewModel.context.value, "Ganador: Jugador 1", Toast.LENGTH_LONG).show()
                     }
                     if (viewModel.CalcularPuntos() == 2) {
                         viewModel.showWinnerDialog.value = true
                         viewModel.winner.value = 2
-                        //Toast.makeText( viewModel.context.value, "Ganador: Jugador 2", Toast.LENGTH_LONG ).show()
                     }
                     if (viewModel.CalcularPuntos() == 0) {
                         viewModel.showWinnerDialog.value = true
                         viewModel.winner.value = "niguno, hay un empate"
-                        //Toast.makeText(viewModel.context.value, "Empate", Toast.LENGTH_LONG).show()
                     }
                 }
                 navController.navigate("pantallaCambio")
@@ -165,6 +163,8 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
             Text(text = "Reiniciar")
         }
     }
+    Log.e("Test", "${viewModel.showWinnerDialog.value}")
+    Log.e("Test", "${viewModel.winner.value}")
 }
 
 @Composable
@@ -189,16 +189,7 @@ fun AlertDialogGanador(
                     onConfirmation()
                 }
             ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
-            ) {
-                Text("Dismiss")
+                Text("Volver a sacar cartas")
             }
         }
     )

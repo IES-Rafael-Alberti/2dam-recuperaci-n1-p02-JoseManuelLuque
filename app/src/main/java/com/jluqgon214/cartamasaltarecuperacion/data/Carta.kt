@@ -5,6 +5,4 @@ class Carta(
     var palo: Palos,
     var puntos: Int,
     var idDrawable: Int
-) {
-
-}
+)
