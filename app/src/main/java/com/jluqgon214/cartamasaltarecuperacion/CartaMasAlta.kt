@@ -29,7 +29,6 @@ import com.jluqgon214.cartamasaltarecuperacion.data.Carta
 import com.jluqgon214.cartamasaltarecuperacion.data.CartaAltaViewModel
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
 
@@ -58,12 +57,12 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
         Spacer(modifier = Modifier.size(20.dp))
         Text(text = "Jugador 1:", color = Color.White)
 
-        mostrarCarta(viewModel = viewModel, navController = navController, cartaJugador = viewModel.cartaJ1.value)
+        MostrarCarta(viewModel = viewModel, navController = navController, cartaJugador = viewModel.cartaJ1.value)
 
         Spacer(modifier = Modifier.size(20.dp))
         Text(text = "Jugador 2:", color = Color.White)
 
-        mostrarCarta(viewModel = viewModel, navController = navController, cartaJugador = viewModel.cartaJ2.value)
+        MostrarCarta(viewModel = viewModel, navController = navController, cartaJugador = viewModel.cartaJ2.value)
     }
 
     Row(
@@ -116,7 +115,7 @@ fun AlertDialogGanador(
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun mostrarCarta(viewModel: CartaAltaViewModel, navController: NavController, cartaJugador: Carta?) {
+fun MostrarCarta(viewModel: CartaAltaViewModel, navController: NavController, cartaJugador: Carta?) {
     Card(
         onClick = {
             viewModel.ComprobarGanador()
