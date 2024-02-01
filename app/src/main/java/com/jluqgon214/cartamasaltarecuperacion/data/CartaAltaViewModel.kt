@@ -42,17 +42,17 @@ class CartaAltaViewModel(application: Application) : AndroidViewModel(applicatio
         Reiniciar(context.value!!)
     }
     fun Reiniciar(context: Context) {
+        getReverseCard()
         Baraja.borrarBaraja()
         Baraja.crearBaraja(context = context)
         Baraja.barajar()
-        getReverseCard()
     }
     
     fun getReverseCard(){
         cartaJ1.value?.idDrawable = R.drawable.reverse
-        //_imageIdJugador1.value = cartaJ1.value?.idDrawable
+        _imageIdJugador1.value = R.drawable.reverse
         cartaJ2.value?.idDrawable = R.drawable.reverse
-        //_imageIdJugador2.value = cartaJ2.value?.idDrawable
+        _imageIdJugador2.value = R.drawable.reverse
     }
 
     fun CalcularPuntos(): Int{
@@ -88,7 +88,7 @@ class CartaAltaViewModel(application: Application) : AndroidViewModel(applicatio
             }
             if (CalcularPuntos() == 0) {
                 _showWinnerDialog.value = true
-                winner.value = 0
+                winner.value = "Ninguno, Empate"
             }
         }
     }

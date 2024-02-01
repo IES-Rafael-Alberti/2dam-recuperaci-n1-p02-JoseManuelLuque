@@ -74,10 +74,7 @@ fun CartaMasAlta(viewModel: CartaAltaViewModel, navController: NavController) {
         horizontalArrangement = Arrangement.Center
     ) {
         Button(onClick = {
-            Baraja.borrarBaraja()
-            Baraja.crearBaraja(viewModel.context.value!!)
-            Baraja.barajar()
-            viewModel.getReverseCard()
+            viewModel.Reiniciar(viewModel.context.value!!)
         }, Modifier.padding(10.dp)) {
             Text(text = "Reiniciar")
         }
